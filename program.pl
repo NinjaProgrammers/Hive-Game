@@ -72,3 +72,13 @@ game_ended :- black_lose, !, writeln("White won.").
 game_ended :- print_board, fail.
 
 play_hive :- restart_positions, change_turn_white.
+
+
+:- op(1000, fx, best_move).
+
+best_move X :- 
+        I is -X,
+        alphabeta(3,I,X,(B:P),_),
+        write("Moving "), write(B), write(" to "),
+        write(P), writeln("."),
+        (move B to P).

@@ -1,11 +1,19 @@
 
-:- module(computer, [available_moves_white/1, available_moves_black/1]).
+:- module(computer, [available_moves_white/1, available_moves_black/1,
+        alphabeta/5]).
 :- use_module([pieces,validate_moves,position,utils,adjacency]).
 
 moves(B,S) :- 
         position(B,-1), !,
         color(B,C),
         insert_positions(C,S).
+moves(B,[]) :-
+        position(B,P),
+        update_position(B,-1),
+        connected_components(CC),
+        update_position(B,P),
+        length(CC,L),
+        L > 1, !.
 moves(B,S) :- 
         type(B,bee),
         position(B,P),
@@ -107,19 +115,15 @@ available_moves_black_visit([X|P],S) :-
         available_moves_black_visit(P,Q),
         append(W,Q,S).
 
-% Limite de profundidad del minimax
-minimax_limit(3).
-
 alphabeta(Depth,Alpha,Beta,BetterMove,Value) :-
         turn(C),
-        minimax_limit(Lim),
-        ((Depth < Lim, available_moves(C,L),not(length(L,0))) ->
+        ((Depth > 0, available_moves(C,L),not(length(L,0))) ->
         boundedbest(Depth,L,Alpha,Beta,BetterMove,Value);
         evaluate(Value)), !.
 boundedbest(Depth,[(B:P)|L],Alpha,Beta,BetterMove,Value) :-
         move_piece(B,P),
         change_turn,
-        D is Depth + 1,
+        D is Depth - 1,
         alphabeta(D,Alpha,Beta,_,V),
         undo_move,
         goodenough(Depth,L,Alpha,Beta,(B:P),V,BetterMove,Value).
@@ -198,7 +202,6 @@ evaluate(R) :-
         evaluate_pieces_blocked(Pb),
         R is Po + Pb.
         
-
 
 
 

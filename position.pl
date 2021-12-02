@@ -1,6 +1,6 @@
 :- module(position, [position/2, update_position/2, restart_positions/0,
                     last_in_stack/2, upper_bug/2, move_piece/2, undo_move/0,
-                    counter/1]).
+                    counter/1, save_nomove/0]).
 
 :- dynamic position/2, stack/2.
 
@@ -120,6 +120,11 @@ restart_counter :-
 :- use_module([utils]).
 
 :- dynamic moves_record/4.
+save_nomove :- 
+        counter(C), 
+        X =.. [moves_record,C,-1,-1,-1],
+        assert(X),
+        increment_counter.
 save_move(B,S,E) :- 
         counter(C), 
         X =.. [moves_record,C,B,S,E],
@@ -131,8 +136,9 @@ undo_move :-
         moves_record(C,B,S,E),
         X =.. [moves_record,C,B,S,E],
         retract(X),
-        update_position(B,S),
-        update_stack(B),
+        (B =\= -1 -> 
+        (update_position(B,S),
+        update_stack(B))),
         change_turn.
 
 move_piece(Piece,Pos) :- 

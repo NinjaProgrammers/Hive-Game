@@ -3,14 +3,14 @@
 piece(white_bee).
 piece(white_beetle_1).
 piece(white_beetle_2).
-piece(white_grasshoper_1).
-piece(white_grasshoper_2).
-piece(white_grasshoper_3).
-piece(white_spider_1).
-piece(white_spider_2).
+%piece(white_grasshoper_1).
+%piece(white_grasshoper_2).
+%piece(white_grasshoper_3).
+%piece(white_spider_1).
+%piece(white_spider_2).
 piece(white_ant_1).
-piece(white_ant_2).
-piece(white_ant_3).
+%piece(white_ant_2).
+%piece(white_ant_3).
 
 %piece(white_ladybug).
 %piece(white_mosquito).
@@ -19,14 +19,14 @@ piece(white_ant_3).
 piece(black_bee).
 piece(black_beetle_1).
 piece(black_beetle_2).
-piece(black_grasshoper_1).
-piece(black_grasshoper_2).
-piece(black_grasshoper_3).
-piece(black_spider_1).
-piece(black_spider_2).
+%piece(black_grasshoper_1).
+%piece(black_grasshoper_2).
+%piece(black_grasshoper_3).
+%piece(black_spider_1).
+%piece(black_spider_2).
 piece(black_ant_1).
-piece(black_ant_2).
-piece(black_ant_3).
+%piece(black_ant_2).
+%piece(black_ant_3).
 
 %piece(black_ladybug).
 %piece(black_mosquito).

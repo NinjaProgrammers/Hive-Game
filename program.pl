@@ -53,6 +53,7 @@ move_8 :-
     available_moves_white(L),
     length(L,0),
     writeln("White does not have available moves."),
+    save_nomove,
     change_turn, !.
 move_8 :- 
     turn(black), 
@@ -61,6 +62,7 @@ move_8 :-
     available_moves_black(L),
     length(L,0),
     writeln("Black does not have available moves."),
+    save_nomove,
     change_turn, !.
 move_8.
 

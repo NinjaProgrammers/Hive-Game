@@ -129,7 +129,7 @@ boundedbest(Depth,[(B:P)|L],Alpha,Beta,BetterMove,Value) :-
         goodenough(Depth,L,Alpha,Beta,(B:P),V,BetterMove,Value).
 goodenough(_,[],_,_,Pos,Val,Pos,Val) :- !.
 goodenough(_,_,Alpha,Beta,Pos,Val,Pos,Val) :- 
-        (turn(white), Val > Beta);
+        (turn(white), Val > Beta), !;
         (turn(black), Val < Alpha), !.
 goodenough(Depth,L,Alpha,Beta,Pos,Val,BetterMove,Value) :-
         updatealphabeta(Alpha,Beta,NAlpha,NBeta),
@@ -137,7 +137,7 @@ goodenough(Depth,L,Alpha,Beta,Pos,Val,BetterMove,Value) :-
         betterof(Pos,Val,P1,V1,BetterMove,Value).
 
 betterof(Pos,Val,_,Val1,Pos,Val) :-
-        (turn(white), Val > Val1);
+        (turn(white), Val > Val1), !;
         (turn(black), Val < Val1), !.
 betterof(_,_,Pos1,Val1,Pos1,Val1).
 updatealphabeta(Alpha, Beta, NAlpha, NBeta) :-

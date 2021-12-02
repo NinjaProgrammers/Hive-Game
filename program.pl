@@ -20,12 +20,12 @@ move_3(X,Y) :-
     move_4(X,Y). 
 move_4(X,Y) :-
     turn(white),
-    ((not(X == white_bee), position(white_bee,-1), counter(C), C >= 6) ->
+    ((not(X == white_bee), position(white_bee,-1), counter(6)) ->
     writeln("You have to move your queen in the first four steps.");
     move_5(X,Y)).
 move_4(X,Y) :-
     turn(black),
-    ((not(X == black_bee), position(black_bee,-1), counter(C), C >= 6) ->
+    ((not(X == black_bee), position(black_bee,-1), counter(7)) ->
     writeln("You have to move your queen in the first four steps.");
     move_5(X,Y)).
 move_5(X,Y) :-

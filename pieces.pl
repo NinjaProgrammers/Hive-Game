@@ -9,7 +9,7 @@ piece(white_beetle_2).
 %piece(white_spider_1).
 %piece(white_spider_2).
 piece(white_ant_1).
-%piece(white_ant_2).
+piece(white_ant_2).
 %piece(white_ant_3).
 
 %piece(white_ladybug).
@@ -25,7 +25,7 @@ piece(black_beetle_2).
 %piece(black_spider_1).
 %piece(black_spider_2).
 piece(black_ant_1).
-%piece(black_ant_2).
+piece(black_ant_2).
 %piece(black_ant_3).
 
 %piece(black_ladybug).

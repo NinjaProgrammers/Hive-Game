@@ -122,7 +122,7 @@ restart_counter :-
 :- dynamic moves_record/4.
 save_nomove :- 
         counter(C), 
-        X =.. [moves_record,C,-1,-1,-1],
+        X =.. [moves_record,C,-2,-2,-2],
         assert(X),
         increment_counter.
 save_move(B,S,E) :- 
@@ -136,7 +136,7 @@ undo_move :-
         moves_record(C,B,S,E),
         X =.. [moves_record,C,B,S,E],
         retract(X),
-        (B =\= -1 -> 
+        (S =\= -2 -> 
         (update_position(B,S),
         update_stack(B))),
         change_turn.

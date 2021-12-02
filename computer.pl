@@ -50,34 +50,49 @@ moves(B,S) :-
         update_position(B,P),
         findall(X,(member(X,T),remain_connected(B,X)),S). 
   
+available_moves(white,S) :- 
+        counter(6), 
+        position(white_bee,-1), !,
+        insert_positions(white,L),
+        reformat(white_bee,L,S).
 available_moves(white,S) :- !, 
         available_moves_white(S).
+available_moves(black,S) :- 
+        counter(7), 
+        position(black_bee,-1), !,
+        insert_positions(black,L),
+        reformat(black_bee,L,S).
 available_moves(black,S) :- !,
         available_moves_black(S).
 
 reformat(_,[],[]).
 reformat(B,[X|S],[(B:X)|T]) :- reformat(B,S,T).
-available_moves_white(S) :- 
+multi_reformat([X|S],L,T) :-
+        reformat(X,L,A),
+        multi_reformat(S,L,B),
+        append(A,B,T).
+multi_reformat([],_,[]).
+
+first_move_white([],[]).
+first_move_white([B|S],[(B:142)|T]) :-
+        first_move_white(S,T).
+available_moves_white(S) :-
+        white_on_board(0), !,
         findall(X,(piece(X),color(X,white)),Y),
-        available_moves_white_visit(Y,S), !.
-available_moves_white_visit([],[]).
-available_moves_white_visit([X|S],[(X:142)|T]) :-
-        white_on_board(0),
-        available_moves_white_visit(S,T), !.
-available_moves_white_visit([X|S],P) :-
-        position(white_bee,-1),
-        position(X,-1), !,
+        first_move_white(Y, S).
+available_moves_white(S) :- 
+        findall(X,(piece(X),color(X,white),position(X,-1)),Z),
         insert_positions(white,T),
-        reformat(X,T,W),
-        available_moves_white_visit(S,Q),
-        append(W,Q,P).
+        multi_reformat(Z,T,Q),
+        findall(X,(piece(X),color(X,white),position(X,P),P =\= -1),Y),
+        available_moves_white_visit(Y,W), 
+        append(Q,W,S), !.
+available_moves_white_visit([],[]).
+available_moves_white_visit(_,[]) :-
+        position(white_bee,-1), !.
 available_moves_white_visit([X|S],T) :-
-        position(white_bee,-1),
         position(X,P),
-        P =\= -1, !,
-        available_moves_white_visit(S,T).
-available_moves_white_visit([X|S],T) :-
-        position(X,P),
+        P =\= -1,
         not(upper_bug(P,X)), !,
         available_moves_white_visit(S,T).
 available_moves_white_visit([X|P],S) :- 
@@ -86,27 +101,26 @@ available_moves_white_visit([X|P],S) :-
         available_moves_white_visit(P,Q),
         append(W,Q,S).
 
-available_moves_black(S) :- 
+first_move_black([],[]).
+first_move_black([B|S],[(B:141)|T]) :-
+        first_move_black(S,T).
+available_moves_black(S) :-
+        black_on_board(0), !,
         findall(X,(piece(X),color(X,black)),Y),
-        available_moves_black_visit(Y,S), !.
-available_moves_black_visit([X|S],[(X:141)|T]) :-
-        black_on_board(0),
-        available_moves_black_visit(S,T), !.
-available_moves_black_visit([X|S],P) :-
-        position(black_bee,-1),
-        position(X,-1), !,
+        first_move_black(Y, S).
+available_moves_black(S) :- 
+        findall(X,(piece(X),color(X,black),position(X,-1)),Z),
         insert_positions(black,T),
-        reformat(X,T,W),
-        available_moves_black_visit(S,Q),
-        append(W,Q,P).
-available_moves_black_visit([X|S],T) :-
-        position(black_bee,-1),
-        position(X,P),
-        P =\= -1, !,
-        available_moves_black_visit(S,T).
+        multi_reformat(Z,T,Q),
+        findall(X,(piece(X),color(X,black),position(X,P),P =\= -1),Y),
+        available_moves_black_visit(Y,W), 
+        append(Q,W,S), !.
+available_moves_black_visit(_,[]) :-
+        position(black_bee,-1), !.
 available_moves_black_visit([],[]).
 available_moves_black_visit([X|S],T) :-
         position(X,P),
+        P =\= -1,
         not(upper_bug(P,X)), !,
         available_moves_black_visit(S,T).
 available_moves_black_visit([X|P],S) :- 

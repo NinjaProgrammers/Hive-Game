@@ -68,9 +68,9 @@ move_8.
 
 
 
-game_ended :- draw, !, print_board, writeln("Draw.").
-game_ended :- white_lose, !, print_board, writeln("Black won.").
-game_ended :- black_lose, !, print_board, writeln("White won.").
+game_ended :- draw, !, writeln("Draw.").
+game_ended :- white_lose, !, writeln("Black won.").
+game_ended :- black_lose, !, writeln("White won.").
 game_ended :- print_board, fail.
 
 play_hive :- restart_positions, change_turn_white.

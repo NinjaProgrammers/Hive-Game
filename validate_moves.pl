@@ -1,7 +1,7 @@
 
 :- module(validate_moves, [validate_move/2, moves_bee/2, insert_positions/2,
         moves_beetle/2, moves_grasshoper/2, moves_spider/2,moves_ant/2,isnt_articulation/1,
-        remain_connected/2]).
+        remain_connected/2, moves_ladybug/2]).
 :- use_module([adjacency, utils, pieces, position]).
 
 moves_bee_visit(_,7,[]) :- !.
@@ -84,6 +84,20 @@ moves_ant(Start,S) :-
         delete(T,Start,S).
 % tengo que kitarl la hormiga pa que esto funcione
 
+moves_ladybug_1(Seen,Queue,Depth,S) :- 
+        Depth<2, !, 
+        append(Seen,Queue,T), 
+        findall(X,(member(Y,Queue), adjacent(Y,X),
+                occupied(X), not(member(X,T))),Next),
+        N is Depth + 1,
+        moves_ladybug_1(T,Next,N,S).
+moves_ladybug_1(Seen,Queue,Depth,S) :- 
+        Depth =:= 2, !, 
+        append(Seen,Queue,T), 
+        findall(X,(member(Y,Queue),adjacent(Y,X),
+                not(occupied(X)), not(member(X,T))),S).
+moves_ladybug(Start,S) :- moves_ladybug_1([],[Start],0,S).
+
 validate_insert(_,[]).
 validate_insert(Color,[X|S]) :- 
         upper_bug(X,B), 
@@ -142,6 +156,9 @@ validate(B,Start,End) :-
 validate(B,Start,End) :- 
         type(B,ant),
         validate_move_ant(Start,End).
+validate(B,Start,End) :- 
+        type(B,ladybug),
+        validate_move_ladybug(Start,End).
 
 
 validate_move_bee(Start,End) :- moves_bee(Start,S), member(End,S).
@@ -153,6 +170,8 @@ validate_move_grasshoper(Start,End) :- moves_grasshoper(Start,S), member(End,S).
 validate_move_spider(Start,End) :- moves_spider(Start,S), member(End,S).
 
 validate_move_ant(Start,End) :- moves_ant(Start,S), member(End,S).
+
+validate_move_ladybug(Start,End) :- moves_ladybug(Start,S), member(End,S).
 
 
 isnt_articulation(B) :-

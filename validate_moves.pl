@@ -1,7 +1,7 @@
 
 :- module(validate_moves, [validate_move/2, moves_bee/2, insert_positions/2,
         moves_beetle/2, moves_grasshoper/2, moves_spider/2,moves_ant/2,isnt_articulation/1,
-        remain_connected/2, moves_ladybug/2]).
+        remain_connected/2, moves_ladybug/2, moves_mosquito/2]).
 :- use_module([adjacency, utils, pieces, position]).
 
 moves_bee_visit(_,7,[]) :- !.
@@ -96,7 +96,41 @@ moves_ladybug_1(Seen,Queue,Depth,S) :-
         append(Seen,Queue,T), 
         findall(X,(member(Y,Queue),adjacent(Y,X),
                 not(occupied(X)), not(member(X,T))),S).
-moves_ladybug(Start,S) :- moves_ladybug_1([],[Start],0,S).
+moves_ladybug(Start,S) :- 
+        moves_ladybug_1([],[Start],0,T),
+        unique(T,S).
+
+moves_mosquito_visit(Start,[Cur|R],S) :-
+        search_moves(Cur,Start,L),
+        moves_mosquito_visit(Start,R,T),
+        append(L,T,S).
+moves_mosquito_visit(_,[],[]).     
+moves_mosquito(Start,S) :- 
+        findall(X,(adjacent(Start,P),position(X,P),not(type(X,mosquito))),B),
+        moves_mosquito_visit(Start,B,T),
+        unique(T,S).
+
+search_moves(B,S,L) :- 
+        type(B,bee), !,
+        moves_bee(S,L).
+search_moves(B,S,L) :-
+        type(B,beetle), !,
+        moves_beetle(S,L).
+search_moves(B,S,L) :-
+        type(B,spider), !,
+        moves_spider(S,L).
+search_moves(B,S,L) :-
+        type(B,grasshoper), !,
+        moves_grasshoper(S,L).
+search_moves(B,S,L) :-
+        type(B,ant), !,
+        moves_ant(S,L).
+search_moves(B,S,L) :-
+        type(B,ladybug), !,
+        moves_ladybug(S,L).
+search_moves(B,S,L) :-
+        type(B,mosquito), !,
+        moves_mosquito(S,L).
 
 validate_insert(_,[]).
 validate_insert(Color,[X|S]) :- 
@@ -173,6 +207,9 @@ validate(B,Start,End) :-
 validate(B,Start,End) :- 
         type(B,ladybug),
         validate_move_ladybug(Start,End).
+validate(B,Start,End) :- 
+        type(B,mosquito),
+        validate_move_mosquito(Start,End).
 
 
 validate_move_bee(Start,End) :- moves_bee(Start,S), member(End,S).
@@ -187,6 +224,7 @@ validate_move_ant(Start,End) :- moves_ant(Start,S), member(End,S).
 
 validate_move_ladybug(Start,End) :- moves_ladybug(Start,S), member(End,S).
 
+validate_move_mosquito(Start,End) :- moves_mosquito(Start,S), member(End,S).
 
 isnt_articulation(B) :-
         position(B,P),

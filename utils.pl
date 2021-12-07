@@ -1,7 +1,7 @@
 :- module(utils, [filter/3, ground_move/2, dfs_empty/3, occupied/1,
         draw/0, black_lose/0, white_lose/0, connected_components/1,
         white_on_board/1, black_on_board/1,turn/1,change_turn/0,change_turn_white/0,
-        change_turn_black/0,adjacent_to_hive/1]).
+        change_turn_black/0,adjacent_to_hive/1,unique/2]).
 :- use_module([adjacency, position, pieces]).
 
 occupied(Position) :- position(_,Position), !.
@@ -102,5 +102,14 @@ change_turn_white :- turn(X), P =.. [turn,X], retract(P),
 change_turn_black :- turn(X), P =.. [turn,X], retract(P),
                      Q =.. [turn,black], assert(Q).
 
-
+unique_visit([Cur|R],V,[Cur|S]) :-
+        not(member(Cur,V)), !,
+        append([Cur],V,NV),
+        unique_visit(R,NV,S).
+unique_visit([Cur|R],V,S) :-
+        member(Cur,V), !,
+        unique_visit(R,V,S).
+unique_visit([],_,[]).
+unique(L,S) :-
+        unique_visit(L,[],S).
 

@@ -58,6 +58,14 @@ moves(B,S) :-
         update_position(B,P),
         findall(X,(member(X,T),remain_connected(B,X)),S).
 
+moves(B,S) :-
+        type(B,mosquito),!,
+        position(B,P),
+        update_position(B,-1),
+        moves_mosquito(P,T),
+        update_position(B,P),
+        findall(X,(member(X,T),remain_connected(B,X)),S).
+
 available_moves(white,S) :-
         counter(6),
         position(white_bee,-1), !,
@@ -81,6 +89,17 @@ multi_reformat([X|S],L,T) :-
         append(A,B,T).
 multi_reformat([],_,[]).
 
+filter_by_type([Cur|R],Types,[Cur|S]) :-
+        type(Cur,T),
+        not(member(T,Types)), !,
+        append([T],Types,NT),
+        filter_by_type(R,NT,S).
+filter_by_type([Cur|R],Types,S) :-
+        type(Cur,T),
+        member(T,Types), !,
+        filter_by_type(R,Types,S).
+filter_by_type([],_,[]).
+
 first_move_white([],[]).
 first_move_white([B|S],[(B:142)|T]) :-
         first_move_white(S,T).
@@ -90,8 +109,9 @@ available_moves_white(S) :-
         first_move_white(Y, S).
 available_moves_white(S) :-
         findall(X,(piece(X),color(X,white),position(X,-1)),Z),
+        filter_by_type(Z,[],NZ),
         insert_positions(white,T),
-        multi_reformat(Z,T,Q),
+        multi_reformat(NZ,T,Q),
         findall(X,(piece(X),color(X,white),position(X,P),P =\= -1),Y),
         available_moves_white_visit(Y,W),
         append(Q,W,S), !.
@@ -118,8 +138,9 @@ available_moves_black(S) :-
         first_move_black(Y, S).
 available_moves_black(S) :-
         findall(X,(piece(X),color(X,black),position(X,-1)),Z),
+        filter_by_type(Z,[],NZ),
         insert_positions(black,T),
-        multi_reformat(Z,T,Q),
+        multi_reformat(NZ,T,Q),
         findall(X,(piece(X),color(X,black),position(X,P),P =\= -1),Y),
         available_moves_black_visit(Y,W),
         append(Q,W,S), !.
@@ -177,7 +198,7 @@ evaluate_pieces_out(R) :-
         findall(X,(piece(X),color(X,black),position(X,-1)),B),
         length(W,P),
         length(B,Q),
-        R is 4 * (Q - P).
+        R is 3 * (Q - P).
 
 evaluate_pieces_blocked(R) :-
         findall(X,(piece(X),color(X,white),not(position(X,-1)),
@@ -198,28 +219,27 @@ evaluate_neighbor_white_bee(R) :-
         position(white_bee,P),
         (P =:= -1 -> R is 0;
         (findall(X,(adjacent(P,X),occupied(X)),Y),
-        length(Y,T)), R is T * T).
+        length(Y,T)), R is T * T * T).
 evaluate_neighbor_black_bee(R) :-
         position(black_bee,P),
         (P =:= -1 -> R is 0;
         (findall(X,(adjacent(P,X),occupied(X)),Y),
-        length(Y,T)), R is T * T).
+        length(Y,T)), R is T * T * T).
 
 greater(W,B,R) :-
         W > B ->
-        R is W * -2;
-        R is B * 2.
+        R is W * -1;
+        R is B * 1.
 evaluate(R):-
         X is 0,
         Y is 0,
-        ((white_lose -> X is -20);
-        (black_lose -> Y is 20)),
+        ((white_lose -> X is -50);
+        (black_lose -> Y is 50)),
         R is X + Y.
 evaluate(R):-
         evaluate_neighbor_white_bee(W),
         evaluate_neighbor_black_bee(B),
-        W =\= B, max(W,B) >= 3, !,
-        greater(W,B,R).
+        R is B - W.
 evaluate(R) :-
         evaluate_pieces_out(Po),
         %evaluate_pieces_blocked(Pb),

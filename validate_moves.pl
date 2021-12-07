@@ -103,21 +103,35 @@ validate_insert(Color,[X|S]) :-
         upper_bug(X,B), 
         color(B,Color),
         validate_insert(Color,S).
-insert_positions_visit(Color,Cur,[Cur|S]) :- 
-        Cur < 300,
-        not(occupied(Cur)), 
+insert_positions(Color,S) :-
+        findall(X,(color(B,Color),position(B,P),adjacent(P,X),not(occupied(X))),Y),
+        insert_positions_visit(Color,Y,S).
+insert_positions_visit(Color,[Cur|R],[Cur|S]) :- 
+        not(member(Cur,R)),
         findall(X,(adjacent(Cur,X),occupied(X)),Y),
         length(Y,Z), 
         Z > 0,
         validate_insert(Color,Y), !,
-        C is Cur + 1,
-        insert_positions_visit(Color,C,S).
-insert_positions_visit(Color,Cur,S) :-
-        Cur < 300,
-        C is Cur + 1,
-        insert_positions_visit(Color,C,S).
-insert_positions_visit(_,300,[]).
-insert_positions(Color,S) :- insert_positions_visit(Color,0,S).
+        insert_positions_visit(Color,R,S).
+insert_positions_visit(Color,[_|R],S) :-
+        insert_positions_visit(Color,R,S).
+insert_positions_visit(_,[],[]).
+
+% insert_positions_visit(Color,Cur,[Cur|S]) :- 
+%         Cur < 300,
+%         not(occupied(Cur)), 
+%         findall(X,(adjacent(Cur,X),occupied(X)),Y),
+%         length(Y,Z), 
+%         Z > 0,
+%         validate_insert(Color,Y), !,
+%         C is Cur + 1,
+%         insert_positions_visit(Color,C,S).
+% insert_positions_visit(Color,Cur,S) :-
+%         Cur < 300,
+%         C is Cur + 1,
+%         insert_positions_visit(Color,C,S).
+% insert_positions_visit(_,300,[]).
+% insert_positions(Color,S) :- insert_positions_visit(Color,0,S).
 
 :- dynamic piece_position/1.
 piece_position(-1).

@@ -4,72 +4,72 @@
 
 :- dynamic position/2, stack/2.
 
-position(white_bee, -1).
-position(white_beetle_1, -1).
-position(white_beetle_2, -1).
-position(white_grasshoper_1, -1).
-position(white_grasshoper_2, -1).
-position(white_grasshoper_3, -1).
-position(white_spider_1, -1).
-position(white_spider_2, -1).
-position(white_ant_1, -1).
-position(white_ant_2, -1).
-position(white_ant_3, -1).
+position(red_bee, -1).
+position(red_beetle_1, -1).
+position(red_beetle_2, -1).
+position(red_grasshoper_1, -1).
+position(red_grasshoper_2, -1).
+position(red_grasshoper_3, -1).
+position(red_spider_1, -1).
+position(red_spider_2, -1).
+position(red_ant_1, -1).
+position(red_ant_2, -1).
+position(red_ant_3, -1).
 
-position(white_ladybug, -1).
-position(white_mosquito, -1).
-position(white_pillbug, -1).
-
-
-position(black_bee, -1).
-position(black_beetle_1, -1).
-position(black_beetle_2, -1).
-position(black_grasshoper_1, -1).
-position(black_grasshoper_2, -1).
-position(black_grasshoper_3, -1).
-position(black_spider_1, -1).
-position(black_spider_2, -1).
-position(black_ant_1, -1).
-position(black_ant_2, -1).
-position(black_ant_3, -1).
-
-position(black_ladybug, -1).
-position(black_mosquito, -1).
-position(black_pillbug, -1).
+position(red_ladybug, -1).
+position(red_mosquito, -1).
+position(red_pillbug, -1).
 
 
-stack(white_bee, -1).
-stack(white_beetle_1, -1).
-stack(white_beetle_2, -1).
-stack(white_grasshoper_1, -1).
-stack(white_grasshoper_2, -1).
-stack(white_grasshoper_3, -1).
-stack(white_spider_1, -1).
-stack(white_spider_2, -1).
-stack(white_ant_1, -1).
-stack(white_ant_2, -1).
-stack(white_ant_3, -1).
+position(blue_bee, -1).
+position(blue_beetle_1, -1).
+position(blue_beetle_2, -1).
+position(blue_grasshoper_1, -1).
+position(blue_grasshoper_2, -1).
+position(blue_grasshoper_3, -1).
+position(blue_spider_1, -1).
+position(blue_spider_2, -1).
+position(blue_ant_1, -1).
+position(blue_ant_2, -1).
+position(blue_ant_3, -1).
 
-stack(white_ladybug, -1).
-stack(white_mosquito, -1).
-stack(white_pillbug, -1).
+position(blue_ladybug, -1).
+position(blue_mosquito, -1).
+position(blue_pillbug, -1).
 
 
-stack(black_bee, -1).
-stack(black_beetle_1, -1).
-stack(black_beetle_2, -1).
-stack(black_grasshoper_1, -1).
-stack(black_grasshoper_2, -1).
-stack(black_grasshoper_3, -1).
-stack(black_spider_1, -1).
-stack(black_spider_2, -1).
-stack(black_ant_1, -1).
-stack(black_ant_2, -1).
-stack(black_ant_3, -1).
+stack(red_bee, -1).
+stack(red_beetle_1, -1).
+stack(red_beetle_2, -1).
+stack(red_grasshoper_1, -1).
+stack(red_grasshoper_2, -1).
+stack(red_grasshoper_3, -1).
+stack(red_spider_1, -1).
+stack(red_spider_2, -1).
+stack(red_ant_1, -1).
+stack(red_ant_2, -1).
+stack(red_ant_3, -1).
 
-stack(black_ladybug, -1).
-stack(black_mosquito, -1).
-stack(black_pillbug, -1).
+stack(red_ladybug, -1).
+stack(red_mosquito, -1).
+stack(red_pillbug, -1).
+
+
+stack(blue_bee, -1).
+stack(blue_beetle_1, -1).
+stack(blue_beetle_2, -1).
+stack(blue_grasshoper_1, -1).
+stack(blue_grasshoper_2, -1).
+stack(blue_grasshoper_3, -1).
+stack(blue_spider_1, -1).
+stack(blue_spider_2, -1).
+stack(blue_ant_1, -1).
+stack(blue_ant_2, -1).
+stack(blue_ant_3, -1).
+
+stack(blue_ladybug, -1).
+stack(blue_mosquito, -1).
+stack(blue_pillbug, -1).
 
 
 update_position(Piece, Pos) :- position(Piece, X),

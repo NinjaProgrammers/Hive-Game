@@ -1,5 +1,5 @@
 
-:- module(computer, [available_moves_white/1, available_moves_black/1,
+:- module(computer, [available_moves_red/1, available_moves_blue/1,
         alphabeta/5]).
 :- use_module([pieces,validate_moves,position,utils,adjacency]).
 
@@ -66,20 +66,20 @@ moves(B,S) :-
         update_position(B,P),
         findall(X,(member(X,T),remain_connected(B,X)),S).
 
-available_moves(white,S) :-
+available_moves(red,S) :-
         counter(6),
-        position(white_bee,-1), !,
-        insert_positions(white,L),
-        reformat(white_bee,L,S).
-available_moves(white,S) :- !,
-        available_moves_white(S).
-available_moves(black,S) :-
+        position(red_bee,-1), !,
+        insert_positions(red,L),
+        reformat(red_bee,L,S).
+available_moves(red,S) :- !,
+        available_moves_red(S).
+available_moves(blue,S) :-
         counter(7),
-        position(black_bee,-1), !,
-        insert_positions(black,L),
-        reformat(black_bee,L,S).
-available_moves(black,S) :- !,
-        available_moves_black(S).
+        position(blue_bee,-1), !,
+        insert_positions(blue,L),
+        reformat(blue_bee,L,S).
+available_moves(blue,S) :- !,
+        available_moves_blue(S).
 
 reformat(_,[],[]).
 reformat(B,[X|S],[(B:X)|T]) :- reformat(B,S,T).
@@ -100,62 +100,62 @@ filter_by_type([Cur|R],Types,S) :-
         filter_by_type(R,Types,S).
 filter_by_type([],_,[]).
 
-first_move_white([],[]).
-first_move_white([B|S],[(B:142)|T]) :-
-        first_move_white(S,T).
-available_moves_white(S) :-
-        white_on_board(0), !,
-        findall(X,(piece(X),color(X,white)),Y),
-        first_move_white(Y, S).
-available_moves_white(S) :-
-        findall(X,(piece(X),color(X,white),position(X,-1)),Z),
+first_move_red([],[]).
+first_move_red([B|S],[(B:142)|T]) :-
+        first_move_red(S,T).
+available_moves_red(S) :-
+        red_on_board(0), !,
+        findall(X,(piece(X),color(X,red)),Y),
+        first_move_red(Y, S).
+available_moves_red(S) :-
+        findall(X,(piece(X),color(X,red),position(X,-1)),Z),
         filter_by_type(Z,[],NZ),
-        insert_positions(white,T),
+        insert_positions(red,T),
         multi_reformat(NZ,T,Q),
-        findall(X,(piece(X),color(X,white),position(X,P),P =\= -1),Y),
-        available_moves_white_visit(Y,W),
+        findall(X,(piece(X),color(X,red),position(X,P),P =\= -1),Y),
+        available_moves_red_visit(Y,W),
         append(Q,W,S), !.
-available_moves_white_visit([],[]).
-available_moves_white_visit(_,[]) :-
-        position(white_bee,-1), !.
-available_moves_white_visit([X|S],T) :-
+available_moves_red_visit([],[]).
+available_moves_red_visit(_,[]) :-
+        position(red_bee,-1), !.
+available_moves_red_visit([X|S],T) :-
         position(X,P),
         P =\= -1,
         not(upper_bug(P,X)), !,
-        available_moves_white_visit(S,T).
-available_moves_white_visit([X|P],S) :-
+        available_moves_red_visit(S,T).
+available_moves_red_visit([X|P],S) :-
         moves(X,T),
         reformat(X,T,W),
-        available_moves_white_visit(P,Q),
+        available_moves_red_visit(P,Q),
         append(W,Q,S).
 
-first_move_black([],[]).
-first_move_black([B|S],[(B:141)|T]) :-
-        first_move_black(S,T).
-available_moves_black(S) :-
-        black_on_board(0), !,
-        findall(X,(piece(X),color(X,black)),Y),
-        first_move_black(Y, S).
-available_moves_black(S) :-
-        findall(X,(piece(X),color(X,black),position(X,-1)),Z),
+first_move_blue([],[]).
+first_move_blue([B|S],[(B:141)|T]) :-
+        first_move_blue(S,T).
+available_moves_blue(S) :-
+        blue_on_board(0), !,
+        findall(X,(piece(X),color(X,blue)),Y),
+        first_move_blue(Y, S).
+available_moves_blue(S) :-
+        findall(X,(piece(X),color(X,blue),position(X,-1)),Z),
         filter_by_type(Z,[],NZ),
-        insert_positions(black,T),
+        insert_positions(blue,T),
         multi_reformat(NZ,T,Q),
-        findall(X,(piece(X),color(X,black),position(X,P),P =\= -1),Y),
-        available_moves_black_visit(Y,W),
+        findall(X,(piece(X),color(X,blue),position(X,P),P =\= -1),Y),
+        available_moves_blue_visit(Y,W),
         append(Q,W,S), !.
-available_moves_black_visit(_,[]) :-
-        position(black_bee,-1), !.
-available_moves_black_visit([],[]).
-available_moves_black_visit([X|S],T) :-
+available_moves_blue_visit(_,[]) :-
+        position(blue_bee,-1), !.
+available_moves_blue_visit([],[]).
+available_moves_blue_visit([X|S],T) :-
         position(X,P),
         P =\= -1,
         not(upper_bug(P,X)), !,
-        available_moves_black_visit(S,T).
-available_moves_black_visit([X|P],S) :-
+        available_moves_blue_visit(S,T).
+available_moves_blue_visit([X|P],S) :-
         moves(X,T),
         reformat(X,T,W),
-        available_moves_black_visit(P,Q),
+        available_moves_blue_visit(P,Q),
         append(W,Q,S).
 
 alphabeta(Depth,Alpha,Beta,BetterMove,Value) :-
@@ -173,8 +173,8 @@ boundedbest(Depth,[(B:P)|L],Alpha,Beta,BetterMove,Value) :-
 goodenough(_,[],_,_,Pos,Val,Pos,Val) :- !.
 goodenough(_,_,Alpha,Beta,Pos,Val,Pos,Val) :-
         %write("Val"),write(Val),write("Alpha"), write(Alpha),write("Beta"),write(Beta),write("\n"),
-        (turn(white), Val >= Beta), !;
-        (turn(black), Val =< Alpha), !.
+        (turn(red), Val >= Beta), !;
+        (turn(blue), Val =< Alpha), !.
 goodenough(Depth,L,Alpha,Beta,Pos,Val,BetterMove,Value) :-
         %write(Val), write(Alpha),write(Beta),write("\n"),
         updatealphabeta(Alpha,Beta,NAlpha,NBeta),
@@ -182,8 +182,8 @@ goodenough(Depth,L,Alpha,Beta,Pos,Val,BetterMove,Value) :-
         betterof(Pos,Val,P1,V1,BetterMove,Value).
 
 betterof(Pos,Val,_,Val1,Pos,Val) :-
-        (turn(white), Val > Val1), !;
-        (turn(black), Val < Val1), !.
+        (turn(red), Val > Val1), !;
+        (turn(blue), Val < Val1), !.
 betterof(_,_,Pos1,Val1,Pos1,Val1).
 updatealphabeta(Alpha, Beta, NAlpha, NBeta) :-
         At is Alpha + 2,
@@ -194,34 +194,34 @@ updatealphabeta(Alpha, Beta, NAlpha, NBeta) :-
 
 
 evaluate_pieces_out(R) :-
-        findall(X,(piece(X),color(X,white),position(X,-1)),W),
-        findall(X,(piece(X),color(X,black),position(X,-1)),B),
+        findall(X,(piece(X),color(X,red),position(X,-1)),W),
+        findall(X,(piece(X),color(X,blue),position(X,-1)),B),
         length(W,P),
         length(B,Q),
         R is 3 * (Q - P).
 
 evaluate_pieces_blocked(R) :-
-        findall(X,(piece(X),color(X,white),not(position(X,-1)),
+        findall(X,(piece(X),color(X,red),not(position(X,-1)),
                 moves(X,S),length(S,0)),W),
-        findall(X,(piece(X),color(X,black),not(position(X,-1)),
+        findall(X,(piece(X),color(X,blue),not(position(X,-1)),
                 moves(X,S),length(S,0)),B),
         length(W,P),
         length(B,Q),
         R is 3 * (Q - P).
 
 evaluate_neighbor_bee(R) :-
-        evaluate_neighbor_white_bee(P),
-        evaluate_neighbor_black_bee(Q),
-        %white_on_board(W),
-        %black_on_board(B),
+        evaluate_neighbor_red_bee(P),
+        evaluate_neighbor_blue_bee(Q),
+        %red_on_board(W),
+        %blue_on_board(B),
         R is (Q - P).
-evaluate_neighbor_white_bee(R) :-
-        position(white_bee,P),
+evaluate_neighbor_red_bee(R) :-
+        position(red_bee,P),
         (P =:= -1 -> R is 0;
         (findall(X,(adjacent(P,X),occupied(X)),Y),
         length(Y,T)), R is T * T * T).
-evaluate_neighbor_black_bee(R) :-
-        position(black_bee,P),
+evaluate_neighbor_blue_bee(R) :-
+        position(blue_bee,P),
         (P =:= -1 -> R is 0;
         (findall(X,(adjacent(P,X),occupied(X)),Y),
         length(Y,T)), R is T * T * T).
@@ -231,12 +231,12 @@ greater(W,B,R) :-
         R is W * -1;
         R is B * 1.
 evaluate(R):-
-        ((white_lose -> X is -50; X is 0),
-        (black_lose -> Y is 50; Y is 0)),
+        ((red_lose -> X is -50; X is 0),
+        (blue_lose -> Y is 50; Y is 0)),
         R is X + Y.
 evaluate(R):-
-        evaluate_neighbor_white_bee(W),
-        evaluate_neighbor_black_bee(B),
+        evaluate_neighbor_red_bee(W),
+        evaluate_neighbor_blue_bee(B),
         R is B - W.
 evaluate(R) :-
         evaluate_pieces_out(Po),

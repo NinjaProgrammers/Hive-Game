@@ -1,7 +1,7 @@
 :- module(utils, [filter/3, ground_move/2, dfs_empty/3, occupied/1,
-        draw/0, black_lose/0, white_lose/0, connected_components/1,
-        white_on_board/1, black_on_board/1,turn/1,change_turn/0,change_turn_white/0,
-        change_turn_black/0,adjacent_to_hive/1,unique/2]).
+        draw/0, blue_lose/0, red_lose/0, connected_components/1,
+        red_on_board/1, blue_on_board/1,turn/1,change_turn/0,change_turn_red/0,
+        change_turn_blue/0,adjacent_to_hive/1,unique/2]).
 :- use_module([adjacency, position, pieces]).
 
 occupied(Position) :- position(_,Position), !.
@@ -73,34 +73,34 @@ connected_components_visit(Seen,Pos,S) :-
         append([X],T,S).
 
 
-black_lose :-
-        position(black_bee,X),
+blue_lose :-
+        position(blue_bee,X),
         findall(Y,(adjacency(X,_,Y),occupied(Y),Y =\= -1),S),
         length(S,6).
-white_lose :-
-        position(white_bee,X),
+red_lose :-
+        position(red_bee,X),
         findall(Y,(adjacency(X,_,Y),occupied(Y),Y =\= -1),S),
         length(S,6).
-draw :- black_lose, white_lose.
+draw :- blue_lose, red_lose.
 
 on_board(X) :- position(X,Y), Y > -1.
-white_on_board(N) :-
-        findall(X,(piece(X),color(X,white)),Z),
+red_on_board(N) :-
+        findall(X,(piece(X),color(X,red)),Z),
         filter(Z,on_board,S),
         length(S,N).
-black_on_board(N) :-
-        findall(X,(piece(X),color(X,black)),Z),
+blue_on_board(N) :-
+        findall(X,(piece(X),color(X,blue)),Z),
         filter(Z,on_board,S),
         length(S,N).
 
 :- dynamic turn/1.
-turn(white).
-change_turn :- turn(X), X == black, change_turn_white, !.
-change_turn :- turn(X), X == white, change_turn_black.
-change_turn_white :- turn(X), P =.. [turn,X], retract(P),
-                     Q =.. [turn,white], assert(Q).
-change_turn_black :- turn(X), P =.. [turn,X], retract(P),
-                     Q =.. [turn,black], assert(Q).
+turn(red).
+change_turn :- turn(X), X == blue, change_turn_red, !.
+change_turn :- turn(X), X == red, change_turn_blue.
+change_turn_red :- turn(X), P =.. [turn,X], retract(P),
+                     Q =.. [turn,red], assert(Q).
+change_turn_blue :- turn(X), P =.. [turn,X], retract(P),
+                     Q =.. [turn,blue], assert(Q).
 
 unique_visit([Cur|R],V,[Cur|S]) :-
         not(member(Cur,V)), !,

@@ -2,7 +2,7 @@
 
 :- op(1100, fx, move).
 :- op(1000, xfy, to).
-move X to Y :- move_1(X,Y), !.
+move X to Y :- move_1(X,Y), !, ia, pc.
 
 move_1(X,Y) :-
     color(X,C),
@@ -80,7 +80,15 @@ play_hive :- restart_positions, change_turn_red.
 
 best_move X :-
         I is -X,
-        alphabeta(2,I,X,(B:P),_),
+        alphabeta(3,I,X,(B:P),_),
         write("Moving "), write(B), write(" to "),
         write(P), writeln("."),
         (move B to P).
+
+ia:- fail.
+
+pc:- turn(blue),
+    ia,
+    best_move(10), !.
+pc:- turn(red), !.
+

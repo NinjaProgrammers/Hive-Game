@@ -1,6 +1,8 @@
 :- module(pieces, [piece/1, board_name/2, color/2, type/2]).
 
 piece(red_bee).
+piece(red_ladybug).
+piece(red_mosquito).
 piece(red_ant_3).
 piece(red_grasshoper_3).
 piece(red_ant_2).
@@ -11,12 +13,11 @@ piece(red_spider_1).
 piece(red_beetle_1).
 piece(red_grasshoper_1).
 piece(red_ant_1).
-
-piece(red_ladybug).
-piece(red_mosquito).
 %piece(red_pillbug).
 
 piece(blue_bee).
+piece(blue_ladybug).
+piece(blue_mosquito).
 piece(blue_ant_3).
 piece(blue_grasshoper_3).
 piece(blue_beetle_2).
@@ -27,9 +28,6 @@ piece(blue_grasshoper_1).
 piece(blue_ant_1).
 piece(blue_spider_1).
 piece(blue_beetle_1).
-
-piece(blue_ladybug).
-piece(blue_mosquito).
 %piece(blue_pillbug).
 
 

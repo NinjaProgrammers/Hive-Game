@@ -17,16 +17,16 @@ piece(red_mosquito).
 %piece(red_pillbug).
 
 piece(blue_bee).
-%piece(blue_ant_3).
-%piece(blue_grasshoper_3).
-%piece(blue_beetle_2).
-%piece(blue_grasshoper_2).
-%piece(blue_spider_2).
-%piece(blue_ant_2).
-%piece(blue_grasshoper_1).
+piece(blue_ant_3).
+piece(blue_grasshoper_3).
+piece(blue_beetle_2).
+piece(blue_grasshoper_2).
+piece(blue_spider_2).
+piece(blue_ant_2).
+piece(blue_grasshoper_1).
 piece(blue_ant_1).
-%piece(blue_spider_1).
-%piece(blue_beetle_1).
+piece(blue_spider_1).
+piece(blue_beetle_1).
 
 piece(blue_ladybug).
 piece(blue_mosquito).

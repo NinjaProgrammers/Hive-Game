@@ -2,7 +2,7 @@
 
 :- op(1100, fx, move).
 :- op(1000, xfy, to).
-move X to Y :- move_1(X,Y), !.
+move X to Y :- move_1(X,Y), !, ia, pc.
 
 move_1(X,Y) :-
     color(X,C),
@@ -52,7 +52,7 @@ move_8 :-
     W > 0,
     available_moves_red(L),
     length(L,0),
-    writeln("red does not have available moves."),
+    writeln("Red does not have available moves."),
     save_nomove,
     change_turn, !.
 move_8 :-
@@ -61,16 +61,16 @@ move_8 :-
     B > 0,
     available_moves_blue(L),
     length(L,0),
-    writeln("blue does not have available moves."),
+    writeln("Blue does not have available moves."),
     save_nomove,
     change_turn, !.
 move_8.
 
 
 
-game_ended :- draw, !, writeln("Draw.").
-game_ended :- red_lose, !, writeln("blue won.").
-game_ended :- blue_lose, !, writeln("red won.").
+game_ended :- draw, !, print_board, writeln("Draw.").
+game_ended :- red_lose, !, print_board, writeln("Blue won.").
+game_ended :- blue_lose, !, print_board, writeln("Red won.").
 game_ended :- print_board, fail.
 
 play_hive :- restart_positions, change_turn_red.
@@ -80,7 +80,15 @@ play_hive :- restart_positions, change_turn_red.
 
 best_move X :-
         I is -X,
-        alphabeta(2,I,X,(B:P),_),
+        alphabeta(3,I,X,(B:P),_),
         write("Moving "), write(B), write(" to "),
         write(P), writeln("."),
         (move B to P).
+
+ia.
+
+pc:- turn(blue),
+    ia,
+    best_move(10), !.
+pc:- turn(red), !.
+

@@ -2,7 +2,7 @@
 
 :- op(1100, fx, move).
 :- op(1000, xfy, to).
-move X to Y :- move_1(X,Y), !, ia, pc.
+move X to Y :- move_1(X,Y), !, move_computer.
 
 move_1(X,Y) :-
     color(X,C),
@@ -85,10 +85,22 @@ best_move X :-
         write(P), writeln("."),
         (move B to P).
 
-ia:- fail.
 
-pc:- turn(blue),
-    ia,
+:- dynamic is_ia_activated/0.
+activate_ia :- 
+    not(is_ia_activated),
+    X =.. [is_ia_activated],
+    assert(X).
+deactivate_ia :- 
+    is_ia_activated,
+    X =.. [is_ia_activated],
+    retract(X).
+
+
+move_computer:- 
+    turn(blue),
+    is_ia_activated,
     best_move(10), !.
-pc:- turn(red), !.
+move_computer:- 
+    turn(red), !.
 

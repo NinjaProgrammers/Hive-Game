@@ -107,35 +107,40 @@ increment_counter :-
 decrement_counter :- 
         counter(C), X =.. [counter,C], retract(X),
         Y is C - 1, Z =.. [counter,Y], assert(Z).
-restart_counter :- 
-        counter(0), !.
-restart_counter :-  
-        decrement_counter,
-        counter(C),
-        moves_record(C,B,S,E),
+
+restart_counter_visit :- 
+        moves_record(C,B,S,E), !,
         X =.. [moves_record,C,B,S,E],
         retract(X),
-        restart_counter.
+        restart_counter_visit.
+restart_counter_visit.
+restart_counter :-  
+        restart_counter_visit,
+        counter(C), C =\= 0, !,
+        X =.. [counter,C], retract(X),
+        Z =.. [counter,0], assert(Z).
+restart_counter.
+
 
 :- use_module([utils]).
 
 :- dynamic moves_record/4.
 save_nomove :- 
+        increment_counter,
         counter(C), 
         X =.. [moves_record,C,-2,-2,-2],
-        assert(X),
-        increment_counter.
+        assert(X). 
 save_move(B,S,E) :- 
+        increment_counter,
         counter(C), 
         X =.. [moves_record,C,B,S,E],
-        assert(X),
-        increment_counter.
+        assert(X).
 undo_move :- 
-        decrement_counter,
         counter(C),
         moves_record(C,B,S,E),
         X =.. [moves_record,C,B,S,E],
         retract(X),
+        decrement_counter,
         (S =\= -2 -> 
         (update_position(B,S),
         update_stack(B))),

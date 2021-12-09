@@ -20,12 +20,12 @@ move_3(X,Y) :-
     move_4(X,Y).
 move_4(X,Y) :-
     turn(red),
-    ((not(X == red_bee), position(red_bee,-1), counter(6)) ->
+    ((not(X == red_bee), position(red_bee,-1), counter(7)) ->
     writeln("You have to move your queen in the first four steps.");
     move_5(X,Y)).
 move_4(X,Y) :-
     turn(blue),
-    ((not(X == blue_bee), position(blue_bee,-1), counter(7)) ->
+    ((not(X == blue_bee), position(blue_bee,-1), counter(8)) ->
     writeln("You have to move your queen in the first four steps.");
     move_5(X,Y)).
 move_5(X,Y) :-
@@ -103,4 +103,31 @@ move_computer:-
     best_move(10), !.
 move_computer:- 
     turn(red), !.
+
+
+activate_red_ladybug :-
+    not(piece(red_ladybug)),
+    X =.. [piece(red_ladybug)],
+    assert(X).
+activate_blue_ladybug :-
+    not(piece(blue_ladybug)),
+    X =.. [piece(blue_ladybug)],
+    assert(X).
+activate_ladybugs :- 
+    activate_red_ladybug,
+    activate_blue_ladybug,
+    play_hive.
+
+deactivate_red_mosquito :-
+    piece(red_mosquito),
+    X =.. [piece(red_mosquito)],
+    retract(X).
+deactivate_blue_mosquito :-
+    piece(blue_mosquito),
+    X =.. [piece(blue_mosquito)],
+    retract(X).
+deactivate_mosquitos :- 
+    deactivate_red_mosquito,
+    deactivate_blue_mosquito,
+    play_hive.
 

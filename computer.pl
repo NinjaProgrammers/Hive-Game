@@ -67,14 +67,14 @@ moves(B,S) :-
         findall(X,(member(X,T),remain_connected(B,X)),S).
 
 available_moves(red,S) :-
-        counter(7),
+        counter(6),
         position(red_bee,-1), !,
         insert_positions(red,L),
         reformat(red_bee,L,S).
 available_moves(red,S) :- !,
         available_moves_red(S).
 available_moves(blue,S) :-
-        counter(8),
+        counter(7),
         position(blue_bee,-1), !,
         insert_positions(blue,L),
         reformat(blue_bee,L,S).

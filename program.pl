@@ -85,23 +85,30 @@ best_move X :-
         write(P), writeln("."),
         (move B to P).
 
+hint:-
+     alphabeta(2,-10,10,(B:P),_),
+     write("Move "), write(B), write(" to "),
+     write(P), writeln(".").
+
 
 :- dynamic is_ia_activated/0.
-activate_ia :- 
+activate_ia :-
     not(is_ia_activated),
     X =.. [is_ia_activated],
-    assert(X).
-deactivate_ia :- 
+    assert(X),
+    turn(blue),
+    move_computer.
+deactivate_ia :-
     is_ia_activated,
     X =.. [is_ia_activated],
     retract(X).
 
 
-move_computer:- 
+move_computer:-
     turn(blue),
     is_ia_activated,
     best_move(10), !.
-move_computer:- 
+move_computer:-
     turn(red), !.
 
 
@@ -113,10 +120,11 @@ activate_blue_ladybug :-
     not(piece(blue_ladybug)),
     X =.. [piece,blue_ladybug],
     assert(X).
-activate_ladybugs :- 
+activate_ladybugs :-
     activate_red_ladybug,
     activate_blue_ladybug,
-    play_hive.
+    play_hive,
+    writeln("New game started.").
 
 deactivate_red_ladybug :-
     piece(red_ladybug),
@@ -126,10 +134,11 @@ deactivate_blue_ladybug :-
     piece(blue_ladybug),
     X =.. [piece,blue_ladybug],
     retract(X).
-deactivate_ladybugs :- 
+deactivate_ladybugs :-
+    play_hive,
     deactivate_red_ladybug,
     deactivate_blue_ladybug,
-    play_hive.
+    writeln("New game started.").
 
 
 activate_red_mosquito :-
@@ -140,10 +149,12 @@ activate_blue_mosquito :-
     not(piece(blue_mosquito)),
     X =.. [piece,blue_mosquito],
     assert(X).
-activate_mosquitos :- 
+activate_mosquitos :-
     activate_red_mosquito,
     activate_blue_mosquito,
-    play_hive.
+    play_hive,
+    writeln("New game started.").
+
 
 deactivate_red_mosquito :-
     piece(red_mosquito),
@@ -153,8 +164,9 @@ deactivate_blue_mosquito :-
     piece(blue_mosquito),
     X =.. [piece,blue_mosquito],
     retract(X).
-deactivate_mosquitos :- 
+deactivate_mosquitos :-
+    play_hive,
     deactivate_red_mosquito,
     deactivate_blue_mosquito,
-    play_hive.
+    writeln("New game started.").
 

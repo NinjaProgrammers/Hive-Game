@@ -2,7 +2,7 @@
 
 :- op(1100, fx, move).
 :- op(1000, xfy, to).
-move X to Y :- move_1(X,Y), !, ia, pc.
+move X to Y :- move_1(X,Y), !, move_computer.
 
 move_1(X,Y) :-
     color(X,C),
@@ -85,10 +85,88 @@ best_move X :-
         write(P), writeln("."),
         (move B to P).
 
-ia.
+hint:-
+     alphabeta(3,-10,10,(B:P),_),
+     write("Move "), write(B), write(" to "),
+     write(P), writeln(".").
 
-pc:- turn(blue),
-    ia,
+
+:- dynamic is_ia_activated/0.
+activate_ia :-
+    not(is_ia_activated),
+    X =.. [is_ia_activated],
+    assert(X),
+    turn(blue),
+    move_computer.
+deactivate_ia :-
+    is_ia_activated,
+    X =.. [is_ia_activated],
+    retract(X).
+
+
+move_computer:-
+    turn(blue),
+    is_ia_activated,
     best_move(10), !.
-pc:- turn(red), !.
+move_computer:-
+    turn(red), !.
+
+
+activate_red_ladybug :-
+    not(piece(red_ladybug)),
+    X =.. [piece,red_ladybug],
+    assert(X).
+activate_blue_ladybug :-
+    not(piece(blue_ladybug)),
+    X =.. [piece,blue_ladybug],
+    assert(X).
+activate_ladybugs :-
+    activate_red_ladybug,
+    activate_blue_ladybug,
+    play_hive,
+    writeln("New game started.").
+
+deactivate_red_ladybug :-
+    piece(red_ladybug),
+    X =.. [piece,red_ladybug],
+    retract(X).
+deactivate_blue_ladybug :-
+    piece(blue_ladybug),
+    X =.. [piece,blue_ladybug],
+    retract(X).
+deactivate_ladybugs :-
+    play_hive,
+    deactivate_red_ladybug,
+    deactivate_blue_ladybug,
+    writeln("New game started.").
+
+
+activate_red_mosquito :-
+    not(piece(red_mosquito)),
+    X =.. [piece,red_mosquito],
+    assert(X).
+activate_blue_mosquito :-
+    not(piece(blue_mosquito)),
+    X =.. [piece,blue_mosquito],
+    assert(X).
+activate_mosquitos :-
+    activate_red_mosquito,
+    activate_blue_mosquito,
+    play_hive,
+    writeln("New game started.").
+
+
+deactivate_red_mosquito :-
+    piece(red_mosquito),
+    X =.. [piece,red_mosquito],
+    retract(X).
+deactivate_blue_mosquito :-
+    piece(blue_mosquito),
+    X =.. [piece,blue_mosquito],
+    retract(X).
+deactivate_mosquitos :-
+    play_hive,
+    deactivate_red_mosquito,
+    deactivate_blue_mosquito,
+    writeln("New game started.").
 
